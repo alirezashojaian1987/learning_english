@@ -2,6 +2,7 @@
 
 import ReduxProvider from "./ReduxProvider";
 import QueryProvider from "./QueryProvider";
+import ThemeProvider from "./ThemeProvider";
 
 export default function Providers({
     children,
@@ -10,7 +11,11 @@ export default function Providers({
 }){
     return(
         <ReduxProvider>
-            <QueryProvider>{children}</QueryProvider>
+            <QueryProvider>
+                <ThemeProvider>
+                    {children}
+                </ThemeProvider>    
+            </QueryProvider>
         </ReduxProvider>
     );
 }

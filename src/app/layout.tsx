@@ -1,5 +1,5 @@
 import Providers from "@/store/providers/Providers";
-
+import {Toaster} from "react-hot-toast";
 export default function RootLayout({
   children,
 }:{
@@ -9,6 +9,7 @@ export default function RootLayout({
     <html lang="fa">
       <body>
         <Providers>{children}</Providers>
+        <Toaster position="top-center"/>
       </body>
     </html>
   );
