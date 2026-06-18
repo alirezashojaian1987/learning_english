@@ -1,8 +1,9 @@
 "use client";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
+import { useAppDispatch,useAppSelector } from "@/store/hooks";
+import { setUser } from "@/store/slices/authSlice";
 import toast from "react-hot-toast";
-
 import {
     loginSchema,
     LoginFormData,
@@ -19,11 +20,15 @@ export default function LoginPage(){
         resolver:zodResolver(loginSchema),
     });
 
+    const dispatch=useAppDispatch();
+    const auth=useAppSelector((state)=>state.auth);
+
     const onSubmit=async(data:LoginFormData)=>{
         try{
             await authService.login(data);
+            const user=await authService.me();
+            dispatch(setUser(user));
             toast.success("ورود موفق");
-            console.log("Logged in");
         }
         catch(error){
             toast.error("خطا در ورود");
@@ -46,6 +51,8 @@ export default function LoginPage(){
                 >
                     Login
                 </button>
+
+                <pre>{JSON.stringify(auth,null,2)}</pre>
             </form>
         </main>
     )
