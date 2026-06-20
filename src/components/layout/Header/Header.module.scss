@@ -1,4 +1,72 @@
 @import "../../../styles/variables.scss";
 .header{
-    // background-color: ;
+    background:white;
+    width:100%;
+    height:70px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding:0 15px;
+
+    .right{
+        display: flex;
+        align-items: center;
+        margin-left:auto;
+        .Main_logo{
+            font-weight: 800;
+            font-size: 22px;
+            color:#2d3748;
+            span{
+                color:$primary_color;
+            }
+        }
+    }
+
+    .left{
+        display: flex;
+        flex-direction: row;
+        gap:10px;
+    }
+
+    .courses_link, .tutors_link{
+        display: flex;
+        font-size: 16px;
+        align-items: center;
+        gap: 5px;
+        font-size: 16px;
+        font-weight: 500;
+        text-decoration: none;
+        width:100px;
+        height:40px;
+        z-index:5;
+        transition: all 0.2s ease-in;
+        &:hover{
+            color:$primary_color;
+            transform: translateY(-1px);
+        }
+
+        .tutor_icon, .courses_icon{
+            font-size: 18px;
+        }
+    }
+
+    .login_btn{
+        // width:75px;
+        padding:0 20px;
+        height:42px;
+        color:$primary_color;
+        font-size: 16px;
+        font-weight: 600;
+
+        border:2px solid $primary_color;
+        border-radius: 18px;
+        z-index:5;
+        transition:all 0.2s ease-in-out;
+        &:hover{
+            border: 2px solid transparent;
+            background-color: $primary_color;
+            color:white;
+        }
+    }
 }
