@@ -26,7 +26,7 @@
     .left{
         display: flex;
         flex-direction: row;
-        gap:10px;
+        gap:8px;
     }
 
     .courses_link, .tutors_link{
@@ -58,7 +58,7 @@
         color:$primary_color;
         font-size: 16px;
         font-weight: 600;
-
+        margin-right: 10px;
         border:2px solid $primary_color;
         border-radius: 18px;
         z-index:5;
