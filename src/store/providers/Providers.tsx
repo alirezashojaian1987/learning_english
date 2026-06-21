@@ -3,6 +3,7 @@
 import ReduxProvider from "./ReduxProvider";
 import QueryProvider from "./QueryProvider";
 import ThemeProvider from "./ThemeProvider";
+import AuthInitializer from "@/components/auth/AuthInitializer";
 
 export default function Providers({
     children,
@@ -11,10 +12,11 @@ export default function Providers({
 }){
     return(
         <ReduxProvider>
+            <AuthInitializer/>
             <QueryProvider>
                 <ThemeProvider>
                     {children}
-                </ThemeProvider>    
+                </ThemeProvider>
             </QueryProvider>
         </ReduxProvider>
     );
