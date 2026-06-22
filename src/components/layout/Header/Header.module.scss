@@ -1,0 +1,125 @@
+@import "../../../styles/variables.scss";
+.header{
+    background:white;
+    width:100%;
+    height:70px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding:0 15px;
+
+    .right{
+        display: flex;
+        align-items: center;
+        margin-left:auto;
+        .Main_logo{
+            font-weight: 800;
+            font-size: 22px;
+            color:#2d3748;
+            span{
+                color:$primary_color;
+            }
+        }
+    }
+
+    .left{
+        display: flex;
+        flex-direction: row;
+        gap:8px;
+    }
+
+    .courses_link, .tutors_link{
+        display: flex;
+        font-size: 16px;
+        align-items: center;
+        gap: 5px;
+        font-size: 16px;
+        font-weight: 500;
+        text-decoration: none;
+        width:100px;
+        height:40px;
+        z-index:5;
+        transition: all 0.2s ease-in;
+        &:hover{
+            color:$primary_color;
+            transform: translateY(-1px);
+        }
+
+        .tutor_icon, .courses_icon{
+            font-size: 18px;
+        }
+    }
+
+    .login_btn{
+        // width:75px;
+        padding:0 20px;
+        height:42px;
+        color:$primary_color;
+        font-size: 16px;
+        font-weight: 600;
+        margin-right: 10px;
+        border:2px solid $primary_color;
+        border-radius: 18px;
+        z-index:5;
+        transition:all 0.2s ease-in-out;
+        &:hover{
+            border: 2px solid transparent;
+            background-color: $primary_color;
+            color:white;
+        }
+    }
+
+    .userMenu{
+        position: relative;
+        .dropdown{
+            position: absolute;
+            top:calc(100% + 8px);
+            left:0;
+            width:180px;background: white;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            overflow: hidden;
+            z-index: 100;
+            padding:6px;
+
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08), 0 4px 10px rgba(0,0,0,0.04);
+
+            .dropdown_item{
+                display: flex;
+                align-items: center;
+                gap:10px;
+                width: 100%;
+                padding:12px 16px;
+                text-align: left;
+                font-size: 14px;
+                font-weight: 500;
+                background: none;
+                border:none;
+                border-radius: 8px;
+                cursor: pointer;
+                text-decoration: none;
+                color:#374151;
+                transition: all 0.2s ease-in;
+
+                &:hover{
+                    background: #f5f5f5;
+                    transform: translateX(2px);
+                }
+
+                svg{
+                    font-size:17px;
+                    flex-shrink: 0;
+                }
+            }
+
+            .logout_btn{
+                color:#dc2626;
+                &:hover{
+                    background: #fef2f2;
+                    color:#b91c1c;
+                }
+            }
+        }
+    }
+}
