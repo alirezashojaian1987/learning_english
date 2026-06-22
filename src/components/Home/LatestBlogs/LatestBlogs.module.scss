@@ -1,0 +1,118 @@
+@import "../../../styles/variables.scss";
+
+.latestBlogs{
+    padding:100px 25px;
+    background:#fafafa;
+    
+    .header{
+        text-align:center;
+        margin-bottom:50px;
+    
+        h2{
+            font-size:42px;
+            font-weight:800;
+            color:#111827;
+        }
+    
+        p{
+            font-size:18px;
+            color:#6b7280;
+            margin-top:12px;
+        }
+    }
+
+    .grid{
+        display:grid;
+        grid-template-columns:repeat(3,1fr);
+        gap:24px;
+    }
+}
+
+
+.card{
+    background:white;
+    border-radius:20px;
+    overflow:hidden;
+    text-decoration:none;
+
+    border:1px solid #eef2f7;
+
+    transition:.25s;
+
+    &:hover{
+        transform:translateY(-6px);
+        box-shadow:0 15px 30px rgba(0,0,0,.08);
+    }
+
+    .imageWrapper{
+        position:relative;
+        height:200px;
+    
+        img{
+            width:100%;
+            height:100%;
+            object-fit:cover;
+        }
+    
+        .category{
+            position:absolute;
+            top:12px;
+            left:12px;
+        
+            background:$primary_color;
+            color:white;
+        
+            padding:6px 10px;
+            border-radius:999px;
+        
+            font-size:12px;
+            font-weight:600;
+        }
+    }
+
+    .content{
+        padding:18px;
+    
+        h3{
+            font-size:18px;
+            font-weight:700;
+            color:#111827;
+            min-height:52px;
+        }
+    
+        p{
+            margin-top:10px;
+            font-size:14px;
+            color:#6b7280;
+            line-height:1.6;
+        }
+        
+        .footer{
+            margin-top:16px;
+            display:flex;
+            justify-content:space-between;
+            font-size:13px;
+            color:#9ca3af;
+            .readMore{
+                color:$primary_color;
+                font-weight:600;
+            }
+        }
+    }
+}
+
+@media (max-width:1024px){
+    .latestBlogs{
+        .grid{
+            grid-template-columns:repeat(2,1fr);
+        }
+    }
+}
+
+@media (max-width:640px){
+    .latestBlogs{
+        .grid{
+            grid-template-columns:1fr;
+        }
+    }
+}

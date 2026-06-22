@@ -1,0 +1,113 @@
+@import "../../../styles/variables.scss";
+
+.featuredTutors{
+    padding:100px 0;
+
+    .header{
+        text-align:center;
+        margin-bottom:50px;
+    
+        h2{
+            font-size:42px;
+            font-weight:800;
+            color:#111827;
+        }
+    
+        p{
+            font-size:18px;
+            color:#6b7280;
+            margin-top:12px;
+        }
+    }
+
+    .grid{
+        display:grid;
+        grid-template-columns:repeat(4,1fr);
+        gap:24px;
+
+        .card{
+            background:white;
+            border-radius:20px;
+            overflow:hidden;
+            text-decoration:none;
+        
+            border:1px solid #eef2f7;
+        
+            transition:.25s ease;
+        
+            &:hover{
+                transform:translateY(-6px);
+                box-shadow:0 15px 30px rgba(0,0,0,.08);
+            }
+
+            // .imageWrapper{
+            //     height:200px;
+            //     background:#f8fafc;
+            //     display:flex;
+            //     align-items:center;
+            //     justify-content:center;
+            
+            //     img{
+            //         width:100%;
+            //         height:100%;
+            //         object-fit:cover;
+            //     }
+            // }
+            
+            .placeholder{
+                font-size:48px;
+            }
+            
+            .content{
+                padding:18px;
+                
+                h3{
+                    font-size:18px;
+                    font-weight:700;
+                    color:#111827;
+                }
+                
+                .country{
+                    display:block;
+                    margin-top:6px;
+                    font-size:13px;
+                    color:#6b7280;
+                }
+                
+                .bio{
+                    margin-top:10px;
+                    font-size:14px;
+                    color:#6b7280;
+                    line-height:1.6;
+                    min-height:44px;
+                }
+                
+                .footer{
+                    margin-top:16px;
+                    
+                    .cta{
+                        font-size:14px;
+                        font-weight:600;
+                        color:$primary_color;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width:1024px){
+    .featuredTutors{
+        .grid{
+            grid-template-columns:repeat(2,1fr);
+        }
+    }
+}
+
+@media (max-width:640px){
+    .featuredTutors{
+        .grid{
+            grid-template-columns:1fr;
+        }
+    }
+}

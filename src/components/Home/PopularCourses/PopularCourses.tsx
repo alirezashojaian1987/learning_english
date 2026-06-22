@@ -1,7 +1,7 @@
 "use client";
 
 import { useCourses } from "@/hooks/queries/useCourses";
-import Image from "next/image";
+// import Image from "next/image";
 import Link from "next/link";
 import styles from "./PopularCourses.module.scss";
 
