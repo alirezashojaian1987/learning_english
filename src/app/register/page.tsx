@@ -135,7 +135,7 @@ export default function RegisterPage(){
                         <input
                             id="email"
                             type="email"
-                            placeholder="user@example.com"
+                            placeholder="Enter your Email: user@example.com"
                             {...register("email")}
                         />
                         {errors.email && <p>{errors.email.message}</p>}
@@ -158,7 +158,7 @@ export default function RegisterPage(){
                             <input
                                 id="confirmPassword"
                                 type="password"
-                                placeholder="Repeat your password"
+                                placeholder="Confirm your password"
                                 {...register("confirmPassword")}
                             />
                             {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
@@ -170,11 +170,10 @@ export default function RegisterPage(){
                     </button>
 
                     <p className={styles.loginText}>
-                        Already have an account? <Link href="/">Login from header</Link>
+                        Already have an account? <Link href="/">Login</Link>
                     </p>
                 </form>
             </section>
         </main>
     );
-
 }
