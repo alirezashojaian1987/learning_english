@@ -16,7 +16,7 @@ export default function LatestBlogs() {
         <section className={styles.latestBlogs}>
             <div className={styles.header}>
                 <h2>Latest Blogs</h2>
-                <p>Read tips, guides and English learning articles</p>
+                <p>Read more tips, guides and English learning articles <Link className={styles.blogsLink} href="/blogs">Blogs</Link></p>
             </div>
 
             <div className={styles.grid}>

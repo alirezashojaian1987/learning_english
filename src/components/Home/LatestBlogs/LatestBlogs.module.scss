@@ -18,6 +18,16 @@
             font-size:18px;
             color:#6b7280;
             margin-top:12px;
+
+            .blogsLink{
+                color:$primary_color;
+                font-size: 20px;
+                font-weight: 500;
+                transition: color 0.3s ease-in-out;
+                &:hover{
+                    color:$primary_color_hovered;
+                }
+            }
         }
     }
 
