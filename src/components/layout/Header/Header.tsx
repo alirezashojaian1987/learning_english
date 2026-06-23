@@ -9,12 +9,12 @@ import { useAppDispatch } from "@/store/hooks";
 import { useAppSelector } from "@/store/hooks";
 import {logout} from "@/store/slices/authSlice";
 import { authService } from "@/services/auth/auth.service";
-import toast from "react-hot-toast";
 
 import { PiChalkboardTeacherLight } from "react-icons/pi";
 import { IoSchoolSharp } from "react-icons/io5";
 import { LuSettings2 } from "react-icons/lu";
 import { TbLogout } from "react-icons/tb";
+import { appToast } from "@/lib/toast";
 
 export default function Header(){
     const [isLoginOpen,setIsLoginOpen]=useState(false);
@@ -27,13 +27,13 @@ export default function Header(){
         try{
             await authService.logout();
             dispatch(logout());
-            toast.success("Logged out successfully");
+            appToast.success("Logged out successfully");
 
             setDropdown_open(false);
         }
         catch(error){
             console.log(error);
-            toast.error("Logout failed");
+            appToast.error("Logout failed");
         }
     };
 

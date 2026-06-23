@@ -7,10 +7,10 @@ import { loginSchema,LoginFormData } from "@/lib/validations/login.schema";
 import { authService } from "@/services/auth/auth.service";
 import { useAppDispatch } from "@/store/hooks";
 import { setUser } from "@/store/slices/authSlice";
-import toast from "react-hot-toast";
 import Link from "next/link";
 
 import { IoClose } from "react-icons/io5";
+import { appToast } from "@/lib/toast";
 
 interface Props{
     onClose:()=>void;
@@ -32,12 +32,12 @@ export default function LoginModal({
             const user=await authService.me();
 
             dispatch(setUser(user));
-            toast.success("Login successful");
+            appToast.success("Login successful");
             console.log(user);
             onClose();
         }
         catch(error){
-            toast.error("Login failed!");
+            appToast.error("Login failed!");
             console.log(error);
         }
     };
