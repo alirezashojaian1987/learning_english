@@ -45,6 +45,7 @@ GET method - Address: api/me - Description: Receive logged in user information
 POST method - Address: api/logout - Description: Log out the user from the system and delete the tokens stored in the cookie.
 
 Important note about JWT Token: After logging in, the user receives his token in the cookie. Subsequent requests from the Axios side do not require any special headers, as withCredentials automatically sends cookies.
+
 ###### Student Dashboard:
 This section is designed specifically for students and includes the ability to view and edit personal information, view enrolled courses, and manage assignments.
 
@@ -62,7 +63,8 @@ Method: GET - Address: api/students/me/dashboard - Description: List of enrolled
 Method: POST - Address: api/enrollments - Description: A student can submit a registration request by selecting a course. The status of this registration is approved or rejected by the Admin.
 
 **User design suggestion:** The Student dashboard section should include the following sections: profile for viewing and editing information - My courses for a list of courses being studied - payments for displaying payment status - Homeworks for a list of registered assignments
-###### Tutor Dashboard
+
+###### Tutor Dashboard:
 The section for tutors is designed with two display modes:
 **Pre-Approval mode**
 If the is_approved field in the tutor profile is False. A multi-step form for completing information should be displayed on the Tutor Dashboard page (create profile form). At the end, a message waiting for the admin will be displayed.

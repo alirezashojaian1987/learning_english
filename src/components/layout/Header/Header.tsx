@@ -54,7 +54,11 @@ export default function Header(){
                             {
                                 isDropdown_open && (
                                     <div className={styles.dropdown}>
-                                        <Link href="/profile" className={styles.dropdown_item}> <LuSettings2/>Profile</Link>
+
+                                        <Link href="/dashboard" className={styles.dropdown_item}> 
+                                            <LuSettings2/>Dashboard
+                                        </Link>
+
                                         <button
                                             className={`${styles.dropdown_item} ${styles.logout_btn}`}
                                             onClick={handleLogout}
