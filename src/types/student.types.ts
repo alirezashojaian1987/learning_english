@@ -6,7 +6,7 @@ export interface StudentDashboard{
     courses_list:number[];
     favourite_tutors:number[];
     student_active:boolean;
-    student_homework_completed:string;
+    student_homework_completed:boolean;
 }
 
 export interface StudentProfilePayload{
@@ -14,7 +14,7 @@ export interface StudentProfilePayload{
     courses_list?:number[];
     favourite_tutors?:number[];
     student_active?:boolean;
-    student_homework_completed?:string;
+    student_homework_completed?:boolean;
 }
 
 export interface Enrollment{
