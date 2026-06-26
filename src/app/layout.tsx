@@ -17,14 +17,17 @@ export default function RootLayout({
           toastOptions={{
             duration:2000,
             className:"appToast",
+
             success:{
               className:"appToast appToastSuccess",
               iconTheme:{primary:"#21B487",secondary:"#ffffff"},
             },
+
             error:{
               className:"appToast appToastError",
               iconTheme:{primary:"#dc2626",secondary:"#ffffff"},
             },
+
             loading:{
               className:"appToast appToastLoading",
               iconTheme:{primary:"#2563eb",secondary:"#ffffff"},
