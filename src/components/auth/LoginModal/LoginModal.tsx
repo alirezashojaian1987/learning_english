@@ -8,6 +8,7 @@ import { authService } from "@/services/auth/auth.service";
 import { useAppDispatch } from "@/store/hooks";
 import { setUser } from "@/store/slices/authSlice";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 import { IoClose } from "react-icons/io5";
 import { appToast } from "@/lib/toast";
@@ -20,6 +21,7 @@ export default function LoginModal({
     onClose,
 }:Props){
     const dispatch=useAppDispatch();
+    const router=useRouter();
     const{
         register,handleSubmit,formState:{errors,isSubmitting},
     }=useForm<LoginFormData>({resolver:zodResolver(loginSchema),});
@@ -35,6 +37,7 @@ export default function LoginModal({
             appToast.success("Login successful");
             console.log(user);
             onClose();
+            router.push(user.is_teacher ? "/dashboard/tutor" : "/dashboard/student");
         }
         catch(error){
             appToast.error("Login failed!");
