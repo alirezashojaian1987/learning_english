@@ -86,7 +86,36 @@ export interface TutorDashboard {
     reviews?:unknown[];
 }
 
-export type TutorProfilePayload=Omit<Tutor,"id" | "user" | "is_approved"> & {
+// export type TutorProfilePayload=Omit<Tutor,"id" | "user" | "is_approved"> & {
+//     first_name:string;
+//     last_name:string;
+// };
+
+export interface TutorProfilePayload{
     first_name:string;
     last_name:string;
-};
+    phone_number:string;
+    country:string;
+
+    subjects:string[];
+
+    languages_spoken:{
+        language:string;
+        level:string;
+    }[];
+
+    bio:string;
+    teaching_style:string;
+    expectation:string;
+    description:string;
+
+    intro_video_url?:string;
+
+    certificates:TutorCertificate[];
+
+    educations:TutorEducation[];
+
+    experiences:TutorExperience[];
+
+    courses:TutorCourse[];
+}

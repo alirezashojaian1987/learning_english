@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useRouter } from "next/router";
+// import { useRouter } from "next/router";
 import { AxiosError } from "axios";
 import {useForm} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -32,7 +32,7 @@ const getRegisterErrorMessage=(error:unknown)=>{
 };
 
 export default function RegisterPage(){
-    const router=useRouter();
+    // const router=useRouter();
     const{
         register,
         handleSubmit,
@@ -65,7 +65,7 @@ export default function RegisterPage(){
         try{
             await authService.register(payload);
             appToast.success(data.is_teacher ? "Tutor account created! Login and complete your tutor profile." : "Student account created! You can login now.");
-            router.push(data.is_teacher ? "/dashboard/tutor" : "/dashboard/student");
+            // router.push(data.is_teacher ? "/dashboard/tutor" : "/dashboard/student");
         }
         catch(error){
             appToast.error(getRegisterErrorMessage(error));
