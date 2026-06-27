@@ -62,9 +62,8 @@ export default function TutorDashboardPage(){
     // const waitingForApproval=Boolean(tutor) && !approved;
 
     const hasTutorProfile = user?.has_tutor_profile ?? false;
-    const tutorApproved = user?.tutor_approved ?? false;
-    const waitingForApproval =
-        hasTutorProfile && !tutorApproved;
+    const tutorApproved =user?.tutor_approved ?? false;
+    const waitingForApproval=hasTutorProfile && !tutorApproved;
 
     const tutorName=useMemo(()=>`${user?.first_name ?? tutor?.user.first_name ?? ""} ${user?.last_name ?? tutor?.user.last_name ?? ""}`.trim() || user?.email || "Tutor",[user,tutor]);
 
