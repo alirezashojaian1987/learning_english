@@ -54,7 +54,7 @@ export default function RegisterPage(){
         },
     });
 
-    // const isTeacher=watch("is_teacher");
+    const isTeacher=watch("is_teacher");
 
     const onSubmit=async(data:RegisterFormData)=>{
         const payload:RegisterPayload={
