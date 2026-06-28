@@ -16,14 +16,19 @@ import { LuSettings2 } from "react-icons/lu";
 import { TbLogout } from "react-icons/tb";
 import { appToast } from "@/lib/toast";
 
+import { useTheme } from "next-themes";
+import { FiMoon,FiSun } from "react-icons/fi";
+
 export default function Header(){
     const [isLoginOpen,setIsLoginOpen]=useState(false);
     const [isDropdown_open,setDropdown_open]=useState(false);
 
     const auth=useAppSelector((state)=>state.auth);
+    const {resolvedTheme,setTheme}=useTheme();
+    const isDark=resolvedTheme==="dark";
     const dispatch=useAppDispatch();
 
-    const handleLogout=async () => {
+    const handleLogout=async()=>{
         try{
             await authService.logout();
             dispatch(logout());
@@ -85,6 +90,16 @@ export default function Header(){
                         <LoginModal onClose={()=>setIsLoginOpen(false)}/>
                     )
                 }
+
+                <button
+                    type="button"
+                    className={styles.themeToggle}
+                    onClick={()=>setTheme(isDark ? "light" : "dark")}
+                    aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+                    title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+                >
+                    {isDark ? <FiSun/> : <FiMoon/>}
+                </button>
 
                 <Link href="/tutors" className={styles.tutors_link}>
                     <PiChalkboardTeacherLight className={styles.tutor_icon}/>

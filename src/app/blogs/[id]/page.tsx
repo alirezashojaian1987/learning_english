@@ -1,3 +1,5 @@
+import styles from "./blog.module.scss";
+
 interface Props{
     params:Promise<{id:string;}>;
 }

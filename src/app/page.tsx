@@ -8,10 +8,10 @@ import LatestBlogs from "@/components/Home/LatestBlogs/LatestBlogs";
 export default function HomePage(){
   return (
     <MainLayout>
-      <Hero/>
-      <PopularCourses/>
-      <FeaturedTutors/>
-      <LatestBlogs/>
+      <Hero />
+      <PopularCourses />
+      <FeaturedTutors />
+      <LatestBlogs />
     </MainLayout>
   );
 }

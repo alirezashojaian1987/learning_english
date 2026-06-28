@@ -3,7 +3,7 @@
 import Link from "next/link";
 import MainLayout from "@/components/layout/MainLayout/MainLayout";
 import { useBlogs } from "@/hooks/queries/useBlogs";
-import styles from "./Blog.module.scss";
+import styles from "./Blogs.module.scss";
 
 export default function BlogPage(){
     const{data:blogs,isLoading,error}=useBlogs();

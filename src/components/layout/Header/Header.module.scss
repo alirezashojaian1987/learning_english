@@ -123,4 +123,35 @@
             }
         }
     }
+
+    .themeToggle{
+        display:grid;
+        width:42px;
+        height:42px;
+        place-items:center;
+        border:1px solid rgba(33,180,135,0.24);
+        border-radius:16px;
+        color:$primary_color;
+        background:rgba(33,180,135,0.09);
+        cursor:pointer;
+        transition:all 0.2s ease;
+
+        &:hover{
+            color:white;
+            background:$primary_color;
+            transform:translateY(-1px);
+        }
+
+        svg{font-size:19px;}
+    }
+
+    :global(.dark) .header{
+        background:#111827;
+        border-bottom:1px solid rgba(148,163,184,0.18);
+
+        .Main_logo{color:#f8fafc;}
+        .courses_link,.tutors_link{color:#e2e8f0;}
+        .userMenu .dropdown{background:#111827;border-color:rgba(148,163,184,0.22);}
+        .userMenu .dropdown .dropdown_item{color:#e2e8f0;&:hover{background:#1f2937;}}
+    }
 }

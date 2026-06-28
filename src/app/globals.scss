@@ -62,3 +62,48 @@ button, input{
   color:#075985 !important;
   background:linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%) !important;
 }
+
+:root{
+  --page-bg:#F2F4F3;
+  --card-bg:#ffffff;
+  --text-primary:#172033;
+  --text-muted:#667085;
+  --border-color:rgba(16,24,40,0.08);
+  --input-bg:#ffffff;
+}
+
+html.dark{
+  color-scheme:dark;
+  --page-bg:#0f172a;
+  --card-bg:#111827;
+  --text-primary:#f8fafc;
+  --text-muted:#cbd5e1;
+  --border-color:rgba(148,163,184,0.22);
+  --input-bg:#0b1220;
+}
+
+body{
+  background-color:var(--page-bg);
+  color:var(--text-primary);
+  transition:background-color .2s ease,color .2s ease;
+}
+
+html.dark section,
+html.dark article,
+html.dark aside,
+html.dark form,
+html.dark .appToast{
+  border-color:var(--border-color) !important;
+}
+
+html.dark h1,
+html.dark h2,
+html.dark h3,
+html.dark strong{
+  color:var(--text-primary) !important;
+}
+
+html.dark p,
+html.dark small{
+  color:var(--text-muted) !important;
+}
