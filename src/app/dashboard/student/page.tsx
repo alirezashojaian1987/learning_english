@@ -17,6 +17,8 @@ import { logout as logoutUser } from "@/store/slices/authSlice";
 import type { StudentProfilePayload } from "@/types/student.types";
 import styles from "./StudentDashboard.module.scss";
 
+import ProtectedRoute from "@/components/ProtectedRoute/ProtectedRoute";
+
 type ActivePanel="courses" | "payments" | "homeworks";
 
 type ProfileFormValues={
@@ -86,7 +88,6 @@ export default function StudentDashboardPage(){
 
     const onUpdateProfile=(data:ProfileFormValues)=>{
         updateProfileMutation.mutate({
-            // user:dashboard?.user,
             student_active:data.student_active,
             student_homework_completed:data.student_homework_completed,
             
@@ -100,154 +101,156 @@ export default function StudentDashboardPage(){
     ];
 
     return(
-        <MainLayout>
-            <main className={styles.dashboardPage}>
-                <aside className={styles.sidebar}>
-                    <div className={styles.profileTop}>
-                        <div className={styles.avatar}><UserRound size={26}/></div>
-                        
-                        <div>
-                            <span>Welcome back</span>
-                            <h2>{studentName}</h2>
-                        </div>
-                    </div>
-
-                    <div className={styles.iconActions}>
-                        <button className={styles.settings_btn} type="button" onClick={()=>setSettingsOpen(true)} aria-label="Open profile settings"><Settings size={20}/></button>
-                        <button className={styles.logout_btn} type="button" onClick={handleLogout} aria-label="Logout"><LogOut size={20}/></button>
-                    </div>
-
-                    <hr/>
-
-                    <nav className={styles.navLinks}>
-                        {panels.map(({id,label,icon:Icon})=>(
-                            <button key={id} type="button" className={activePanel===id ? styles.activeLink : ""} onClick={()=>setActivePanel(id)}>
-                                <Icon size={20}/>
-                                {label}
-                            </button>
-                        ))}
-                    </nav>
-                </aside>
-
-                <section className={styles.content}>
-                    <div className={styles.headerCard}>
-                        <div>
-                            <span>Student dashboard</span>
-                            <h1>{activePanel==="courses" ? "My courses" : activePanel==="payments" ? "Payments & enrollment status" : "Homeworks"}</h1>
-                            <p>Manage your courses, enrollment approvals, payment records, and assignments from one place.</p>
+        <ProtectedRoute>
+            <MainLayout>
+                <main className={styles.dashboardPage}>
+                    <aside className={styles.sidebar}>
+                        <div className={styles.profileTop}>
+                            <div className={styles.avatar}><UserRound size={26}/></div>
+                            
+                            <div>
+                                <span>Welcome back</span>
+                                <h2>{studentName}</h2>
+                            </div>
                         </div>
 
-                        {/* <div className={styles.statusPill}>
-                            .homeworkCard
-                            <CheckCircle2 size={18}/>
-                            {dashboard ? (dashboard.student_active ? "Active student" : "Inactive student") : "Loading status"}
-                        </div> */}
-                    </div>
+                        <div className={styles.iconActions}>
+                            <button className={styles.settings_btn} type="button" onClick={()=>setSettingsOpen(true)} aria-label="Open profile settings"><Settings size={20}/></button>
+                            <button className={styles.logout_btn} type="button" onClick={handleLogout} aria-label="Logout"><LogOut size={20}/></button>
+                        </div>
 
-                    {dashboardLoading && <p className={styles.state}><Loader2 className={styles.spin}/> Loading dashboard...</p>}
-                    {dashboardError && <p className={styles.error}>Failed to load student dashboard data.</p>}
+                        <hr/>
 
-                    {activePanel==="courses" && (
-                        <div className={styles.cardGrid}>
-                            {enrollmentsLoading && <p className={styles.state}>Loading enrolled courses...</p>}
-                            {enrollmentsError && <p className={styles.error}>Failed to load enrollments.</p>}
-
-                            {!enrollmentsLoading && enrollments?.length===0 && <p className={styles.state}>You do not have any course enrollments yet.</p>}
-                            {enrollments?.map((enrollment)=>(
-                                <article className={styles.courseCard} key={enrollment.id}>
-                                    <span 
-                                        className={`${styles.status} ${enrollment.status==="Pending" ? styles.pending : enrollment.status==="Success" ? styles.success : styles.rejected}`}>
-                                        {enrollment.status}
-                                    </span>
-
-                                    <h2>{enrollment.course.title}</h2>
-
-                                    <p>{enrollment.course.description || enrollment.course.detail}</p>
-
-                                    <div className={styles.meta}><span>{enrollment.course.language}</span><span>{enrollment.course.level}</span></div>
-                                </article>
+                        <nav className={styles.navLinks}>
+                            {panels.map(({id,label,icon:Icon})=>(
+                                <button key={id} type="button" className={activePanel===id ? styles.activeLink : ""} onClick={()=>setActivePanel(id)}>
+                                    <Icon size={20}/>
+                                    {label}
+                                </button>
                             ))}
+                        </nav>
+                    </aside>
+
+                    <section className={styles.content}>
+                        <div className={styles.headerCard}>
+                            <div>
+                                <span>Student dashboard</span>
+                                <h1>{activePanel==="courses" ? "My courses" : activePanel==="payments" ? "Payments & enrollment status" : "Homeworks"}</h1>
+                                <p>Manage your courses, enrollment approvals, payment records, and assignments from one place.</p>
+                            </div>
+
+                            {/* <div className={styles.statusPill}>
+                                .homeworkCard
+                                <CheckCircle2 size={18}/>
+                                {dashboard ? (dashboard.student_active ? "Active student" : "Inactive student") : "Loading status"}
+                            </div> */}
                         </div>
-                    )}
 
-                    {activePanel==="payments" && (
-                        <div className={styles.tableCard}>
-                            {enrollmentsLoading && <p className={styles.state}>Loading payments...</p>}
-                            {enrollmentsError && <p className={styles.error}>Failed to load payment details.</p>}
-                            {!enrollmentsLoading && enrollments?.length===0 && <p className={styles.state}>No payment or enrollment records are available yet.</p>}
+                        {dashboardLoading && <p className={styles.state}><Loader2 className={styles.spin}/> Loading dashboard...</p>}
+                        {dashboardError && <p className={styles.error}>Failed to load student dashboard data.</p>}
 
-                            {enrollments?.map((enrollment)=>(
-                                <div className={styles.paymentRow} key={enrollment.id}>
-                                    <div>
-                                        <strong>{enrollment.course.title}</strong><span>{enrollment.payment_note || "No payment note"}</span>
+                        {activePanel==="courses" && (
+                            <div className={styles.cardGrid}>
+                                {enrollmentsLoading && <p className={styles.state}>Loading enrolled courses...</p>}
+                                {enrollmentsError && <p className={styles.error}>Failed to load enrollments.</p>}
+
+                                {!enrollmentsLoading && enrollments?.length===0 && <p className={styles.state}>You do not have any course enrollments yet.</p>}
+                                {enrollments?.map((enrollment)=>(
+                                    <article className={styles.courseCard} key={enrollment.id}>
+                                        <span 
+                                            className={`${styles.status} ${enrollment.status==="Pending" ? styles.pending : enrollment.status==="Success" ? styles.success : styles.rejected}`}>
+                                            {enrollment.status}
+                                        </span>
+
+                                        <h2>{enrollment.course.title}</h2>
+
+                                        <p>{enrollment.course.description || enrollment.course.detail}</p>
+
+                                        <div className={styles.meta}><span>{enrollment.course.language}</span><span>{enrollment.course.level}</span></div>
+                                    </article>
+                                ))}
+                            </div>
+                        )}
+
+                        {activePanel==="payments" && (
+                            <div className={styles.tableCard}>
+                                {enrollmentsLoading && <p className={styles.state}>Loading payments...</p>}
+                                {enrollmentsError && <p className={styles.error}>Failed to load payment details.</p>}
+                                {!enrollmentsLoading && enrollments?.length===0 && <p className={styles.state}>No payment or enrollment records are available yet.</p>}
+
+                                {enrollments?.map((enrollment)=>(
+                                    <div className={styles.paymentRow} key={enrollment.id}>
+                                        <div>
+                                            <strong>{enrollment.course.title}</strong><span>{enrollment.payment_note || "No payment note"}</span>
+                                        </div>
+
+                                        <div>{enrollment.payment_amount} {enrollment.currency}</div>
+
+                                        <span className={styles.status}>{enrollment.status}</span>
+
+                                        <small>Submitted: {formatDate(enrollment.submitted_at)} · Reviewed: {formatDate(enrollment.reviewed_at)}</small>
                                     </div>
+                                ))}
+                            </div>
+                        )}
 
-                                    <div>{enrollment.payment_amount} {enrollment.currency}</div>
+                        {activePanel==="homeworks" && (
+                            <div className={styles.cardGrid}>
+                                {homeworksLoading && <p className={styles.state}>Loading homeworks...</p>}
+                                {homeworksError && <p className={styles.error}>Failed to load homeworks.</p>}
+                                {!homeworksLoading && homeworks?.length===0 && <p className={styles.state}>No homework has been assigned yet.</p>}
+                                
+                                {homeworks?.map((homework)=>(
+                                    <article className={styles.homeworkCard} key={homework.id}>
+                                        <FileText size={24}/>
+                                        <h2>{homework.title}</h2>
+                                        <p>Due date: {formatDate(homework.due_date)}</p>
+                                        {homework.document && <a href={homework.document} target="_blank" rel="noreferrer">Open document</a>}
+                                    </article>
+                                ))}
+                            </div>
+                        )}
+                    </section>
 
-                                    <span className={styles.status}>{enrollment.status}</span>
+                    {settingsOpen && (
+                        <div className={styles.modalOverlay}>
+                            <form className={styles.settingsModal} onSubmit={form.handleSubmit(onUpdateProfile)}>
+                                <button className={styles.closeButton} type="button" onClick={()=>setSettingsOpen(false)} aria-label="Close settings"><X size={20}/></button>
 
-                                    <small>Submitted: {formatDate(enrollment.submitted_at)} · Reviewed: {formatDate(enrollment.reviewed_at)}</small>
+                                <span>Profile settings</span>
+                                <h2>Edit student profile</h2>
+
+                                <div className={styles.checkbox_field}>
+                                    <label htmlFor="student_active">Student is active</label>
+                                    <input
+                                        id="student_active"
+                                        type="checkbox" 
+                                        {...form.register("student_active")}
+                                    />
                                 </div>
-                            ))}
+
+                                <div className={styles.checkbox_field}>
+                                    <label htmlFor="hw_completed">Homeworks completed</label>
+                                    <input
+                                        id="hw_completed"
+                                        type="checkbox" 
+                                        {...form.register("student_homework_completed")}
+                                    />
+                                </div>
+
+
+                                {/* <label>Course ids</label>
+                                <input placeholder="1, 2, 3" {...form.register("courses_list")}/>
+                                
+                                <label>Favourite tutor ids</label>
+                                <input placeholder="4, 7" {...form.register("favourite_tutors")}/> */}
+
+                                <button type="submit" disabled={updateProfileMutation.isPending}>{updateProfileMutation.isPending ? "Saving..." : "Save changes"}</button>
+                            </form>
                         </div>
                     )}
-
-                    {activePanel==="homeworks" && (
-                        <div className={styles.cardGrid}>
-                            {homeworksLoading && <p className={styles.state}>Loading homeworks...</p>}
-                            {homeworksError && <p className={styles.error}>Failed to load homeworks.</p>}
-                            {!homeworksLoading && homeworks?.length===0 && <p className={styles.state}>No homework has been assigned yet.</p>}
-                            
-                            {homeworks?.map((homework)=>(
-                                <article className={styles.homeworkCard} key={homework.id}>
-                                    <FileText size={24}/>
-                                    <h2>{homework.title}</h2>
-                                    <p>Due date: {formatDate(homework.due_date)}</p>
-                                    {homework.document && <a href={homework.document} target="_blank" rel="noreferrer">Open document</a>}
-                                </article>
-                            ))}
-                        </div>
-                    )}
-                </section>
-
-                {settingsOpen && (
-                    <div className={styles.modalOverlay}>
-                        <form className={styles.settingsModal} onSubmit={form.handleSubmit(onUpdateProfile)}>
-                            <button className={styles.closeButton} type="button" onClick={()=>setSettingsOpen(false)} aria-label="Close settings"><X size={20}/></button>
-
-                            <span>Profile settings</span>
-                            <h2>Edit student profile</h2>
-
-                            <div className={styles.checkbox_field}>
-                                <label htmlFor="student_active">Student is active</label>
-                                <input
-                                    id="student_active"
-                                    type="checkbox" 
-                                    {...form.register("student_active")}
-                                />
-                            </div>
-
-                            <div className={styles.checkbox_field}>
-                                <label htmlFor="hw_completed">Homeworks completed</label>
-                                <input
-                                    id="hw_completed"
-                                    type="checkbox" 
-                                    {...form.register("student_homework_completed")}
-                                />
-                            </div>
-
-
-                            {/* <label>Course ids</label>
-                            <input placeholder="1, 2, 3" {...form.register("courses_list")}/>
-                            
-                            <label>Favourite tutor ids</label>
-                            <input placeholder="4, 7" {...form.register("favourite_tutors")}/> */}
-
-                            <button type="submit" disabled={updateProfileMutation.isPending}>{updateProfileMutation.isPending ? "Saving..." : "Save changes"}</button>
-                        </form>
-                    </div>
-                )}
-            </main>
-        </MainLayout>
+                </main>
+            </MainLayout>
+        </ProtectedRoute>
     );
 }

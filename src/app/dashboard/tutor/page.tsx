@@ -16,10 +16,18 @@ import { logout as logoutUser } from "@/store/slices/authSlice";
 import type { TutorCourse, TutorProfilePayload } from "@/types/tutor.types";
 import styles from "./TutorDashboard.module.scss";
 
-// import { AxiosError } from "axios";
+import ProtectedRoute from "@/components/ProtectedRoute/ProtectedRoute";
+
 
 type ActivePanel="overview" | "courses" | "credentials" | "reviews";
-type CourseFormValues=Omit<TutorCourse,"id" | "tutor" | "days_available" | "time_slots"> & {days_available:string; time_slots:string};
+
+type CourseFormValues=Omit<TutorCourse,"id" | "tutor" | "days_available" | "time_slots" | "price_per_hour"> & {
+    price_per_hour:number | string;
+    days_available:string[];
+    time_slot_start:string;
+    time_slot_end:string;
+};
+
 type ProfileFormValues={
     phone_number:string;
     country:string;
@@ -32,19 +40,31 @@ type ProfileFormValues={
     intro_video_url:string;
 };
 
+const weekDays=[
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday"
+];
+
 const emptyCourse:CourseFormValues={course_title:"",
     duration_minutes:60,
     course_type:"online",
-    price_per_hour:"10.00",
-    lesson_package:"Single lesson",
+    price_per_hour:10,
+    lesson_package:"Single",
     language:"English",
-    days_available:"Monday",
-    time_slots:"10:00 - 11:00",
+    days_available:["Monday"],
+    time_slot_start:"10:00",
+    time_slot_end:"11:00",
     start_date:new Date().toISOString().slice(0,10),
     description:""
 };
 
 const splitList=(value:string)=>value.split(",").map((item)=>item.trim()).filter(Boolean);
+const formatDecimalString=(value:number | string)=>Number(value || 0).toFixed(2);
 
 export default function TutorDashboardPage(){
     const router=useRouter();
@@ -126,7 +146,17 @@ export default function TutorDashboardPage(){
     });
 
     const createCourseMutation=useMutation({
-        mutationFn:(data:CourseFormValues)=>tutorService.createCourse({...data,duration_minutes:Number(data.duration_minutes),days_available:splitList(data.days_available),time_slots:splitList(data.time_slots)}),
+        mutationFn:(data:CourseFormValues)=>{
+            const {time_slot_start,time_slot_end,...course}=data;
+
+            return tutorService.createCourse({
+                ...course,
+                duration_minutes:Number(course.duration_minutes),
+                price_per_hour:formatDecimalString(course.price_per_hour),
+                days_available:course.days_available,
+                time_slots:[`${time_slot_start} - ${time_slot_end}`],
+            });
+        },
 
         onSuccess:()=>{
             appToast.success("Course created successfully.");
@@ -243,166 +273,168 @@ export default function TutorDashboardPage(){
         )
     }
 
-    return <MainLayout>
-            <main className={styles.dashboardPage}>
-                <aside className={styles.sidebar}>
-                    <div className={styles.profileTop}>
-                        <div className={styles.avatar}>
-                            <UserRound size={26}/>
+    return <ProtectedRoute allowedRoles={["tutor"]}> 
+            <MainLayout>
+                <main className={styles.dashboardPage}>
+                    <aside className={styles.sidebar}>
+                        <div className={styles.profileTop}>
+                            <div className={styles.avatar}>
+                                <UserRound size={26}/>
+                            </div>
+
+                            <div>
+                                <span>Welcome back</span>
+                                <h2>{tutorName}</h2>
+                            </div>
                         </div>
 
-                        <div>
-                            <span>Welcome back</span>
-                            <h2>{tutorName}</h2>
-                        </div>
-                    </div>
-
-                    <div className={styles.iconActions}>
-                        <button className={styles.settings_btn} type="button" onClick={()=>setProfileOpen(true)}>
-                            <Settings size={20}/>
-                        </button>
-                        
-                        <button className={styles.logout_btn} type="button" onClick={handleLogout}>
-                            <LogOut size={20}/>
-                        </button>
-                    </div>
-                    
-                    <hr/>
-                    
-                    <nav className={styles.navLinks}>
-                        {nav.map(({id,label,icon:Icon})=>
-                            <button key={id} type="button" className={activePanel===id ? styles.activeLink : ""} onClick={()=>setActivePanel(id)}>
-                                <Icon size={20}/>{label}
+                        <div className={styles.iconActions}>
+                            <button className={styles.settings_btn} type="button" onClick={()=>setProfileOpen(true)}>
+                                <Settings size={20}/>
                             </button>
-                        )}
-                        </nav>
-                </aside>
-                
-                <section className={styles.content}>
-                    <div className={styles.headerCard}>
-                        <div>
-                            <span>Tutor dashboard</span>
-                            <h1>{nav.find((item)=>item.id===activePanel)?.label}</h1>
-                            <p>Manage profile approval details, courses, credentials, student activity, and reviews from one tutor workspace.</p>
+                            
+                            <button className={styles.logout_btn} type="button" onClick={handleLogout}>
+                                <LogOut size={20}/>
+                            </button>
                         </div>
                         
-                        <span className={styles.status}>Approved</span>
-                    </div>
+                        <hr/>
+                        
+                        <nav className={styles.navLinks}>
+                            {nav.map(({id,label,icon:Icon})=>
+                                <button key={id} type="button" className={activePanel===id ? styles.activeLink : ""} onClick={()=>setActivePanel(id)}>
+                                    <Icon size={20}/>{label}
+                                </button>
+                            )}
+                            </nav>
+                    </aside>
                     
-                    {dashboardError && 
-                        <p className={styles.error}> Failed to load tutor dashboard.</p>
-                    }
-                    
-                    {activePanel==="overview" && <>
-                        <div className={styles.statsGrid}>
-                            <div className={styles.statCard}>
-                                <span>Students</span>
-                                <strong>
-                                    {dashboard?.enrollments?.length ?? 0}
-                                </strong>
+                    <section className={styles.content}>
+                        <div className={styles.headerCard}>
+                            <div>
+                                <span>Tutor dashboard</span>
+                                <h1>{nav.find((item)=>item.id===activePanel)?.label}</h1>
+                                <p>Manage profile approval details, courses, credentials, student activity, and reviews from one tutor workspace.</p>
                             </div>
                             
-                            <div className={styles.statCard}>
-                                <span>Satisfaction</span>
-                                <strong>100%</strong>
-                            </div>
-                            
-                            <div className={styles.statCard}>
-                                <span>Active courses</span>
-                                <strong>{courses?.length ?? dashboard?.courses?.length ?? 0}</strong>
-                            </div>
-                            
-                            <div className={styles.statCard}>
-                                <span>Reviews</span>
-                                <strong>{dashboard?.reviews?.length ?? 0}</strong>
-                            </div>
+                            <span className={styles.status}>Approved</span>
                         </div>
+                        
+                        {dashboardError && 
+                            <p className={styles.error}> Failed to load tutor dashboard.</p>
+                        }
+                        
+                        {activePanel==="overview" && <>
+                            <div className={styles.statsGrid}>
+                                <div className={styles.statCard}>
+                                    <span>Students</span>
+                                    <strong>
+                                        {dashboard?.enrollments?.length ?? 0}
+                                    </strong>
+                                </div>
+                                
+                                <div className={styles.statCard}>
+                                    <span>Satisfaction</span>
+                                    <strong>100%</strong>
+                                </div>
+                                
+                                <div className={styles.statCard}>
+                                    <span>Active courses</span>
+                                    <strong>{courses?.length ?? dashboard?.courses?.length ?? 0}</strong>
+                                </div>
+                                
+                                <div className={styles.statCard}>
+                                    <span>Reviews</span>
+                                    <strong>{dashboard?.reviews?.length ?? 0}</strong>
+                                </div>
+                            </div>
 
-                        <article className={styles.courseCard}>
-                            <h2>{tutor.bio || "Add your teaching bio"}</h2>
-                            <p>{tutor.description || "Use profile settings to complete your public tutor description."}</p>
+                            <article className={styles.courseCard}>
+                                <h2>{tutor.bio || "Add your teaching bio"}</h2>
+                                <p>{tutor.description || "Use profile settings to complete your public tutor description."}</p>
 
-                            <div className={styles.meta}>
-                                {tutor.subjects?.map((subject)=>
-                                    <span key={subject}>{subject}</span>
+                                <div className={styles.meta}>
+                                    {tutor.subjects?.map((subject)=>
+                                        <span key={subject}>{subject}</span>
+                                    )}
+                                </div>
+                            </article>
+                        </>
+                        }
+                        
+                        {activePanel==="courses" && 
+                            <div className={styles.tableCard}>
+                                <button className={styles.textButton} type="button" onClick={()=>setCourseOpen(true)}>
+                                    <Plus size={16}/> Add course
+                                </button>
+
+                                {coursesLoading && 
+                                    <p className={styles.state}>Loading courses...</p>
+                                }
+                                
+                                {coursesError && 
+                                    <p className={styles.error}>Failed to load courses.</p>
+                                }
+                                
+                                {courses?.map((course)=>
+                                    <div className={styles.paymentRow} key={course.id}>
+                                        <div>
+                                            <strong>{course.course_title}</strong>
+                                            <span>{course.description}</span>
+                                        </div>
+                                        
+                                        <div>{course.price_per_hour}/hour</div>
+                                        
+                                        <span className={styles.status}>{course.course_type}</span>
+                                        
+                                        <button
+                                            className={styles.dangerButton}
+                                            type="button"
+                                            onClick={()=>course.id && deleteCourseMutation.mutate(course.id)}
+                                        >
+                                            <Trash2 size={16}/>
+                                        </button>
+                                    </div>
                                 )}
                             </div>
-                        </article>
-                    </>
-                    }
+                        }
+                        
+                        {activePanel==="credentials" && 
+                            <div className={styles.cardGrid}>
+                                <CredentialCard title="Certificates" items={tutor.certificates?.map((item)=>`${item.title} · ${item.issued_by}`)}/>
+                                <CredentialCard title="Educations" items={tutor.educations?.map((item)=>`${item.degree} · ${item.institution_name}`)}/>
+                                <CredentialCard title="Experiences" items={tutor.experiences?.map((item)=>`${item.title} · ${item.organization || item.city}`)}/>
+                            </div>
+                        }
+                        
+                        {activePanel==="reviews" && 
+                            <div className={styles.tableCard}>
+                                <p className={styles.state}>Review management will list student feedback here when the backend returns reviews.</p>
+                            </div>
+                        }
+                        
+                    </section>
                     
-                    {activePanel==="courses" && 
-                        <div className={styles.tableCard}>
-                            <button className={styles.textButton} type="button" onClick={()=>setCourseOpen(true)}>
-                                <Plus size={16}/> Add course
-                            </button>
-
-                            {coursesLoading && 
-                                <p className={styles.state}>Loading courses...</p>
-                            }
-                            
-                            {coursesError && 
-                                <p className={styles.error}>Failed to load courses.</p>
-                            }
-                            
-                            {courses?.map((course)=>
-                                <div className={styles.paymentRow} key={course.id}>
-                                    <div>
-                                        <strong>{course.course_title}</strong>
-                                        <span>{course.description}</span>
-                                    </div>
-                                    
-                                    <div>{course.price_per_hour}/hour</div>
-                                    
-                                    <span className={styles.status}>{course.course_type}</span>
-                                    
-                                    <button
-                                        className={styles.dangerButton}
-                                        type="button"
-                                        onClick={()=>course.id && deleteCourseMutation.mutate(course.id)}
-                                    >
-                                        <Trash2 size={16}/>
-                                    </button>
-                                </div>
-                            )}
-                        </div>
-                    }
+                    {profileOpen && 
+                        <ProfileModal 
+                            form={profileForm}
+                            onClose={()=>setProfileOpen(false)}
+                            onSubmit={createProfileMutation.mutate}
+                            pending={createProfileMutation.isPending}
+                        />    
+                    } 
                     
-                    {activePanel==="credentials" && 
-                        <div className={styles.cardGrid}>
-                            <CredentialCard title="Certificates" items={tutor.certificates?.map((item)=>`${item.title} · ${item.issued_by}`)}/>
-                            <CredentialCard title="Educations" items={tutor.educations?.map((item)=>`${item.degree} · ${item.institution_name}`)}/>
-                            <CredentialCard title="Experiences" items={tutor.experiences?.map((item)=>`${item.title} · ${item.organization || item.city}`)}/>
-                        </div>
+                    {courseOpen && 
+                        <CourseModal
+                            form={courseForm}
+                            onClose={()=>setCourseOpen(false)}
+                            onSubmit={createCourseMutation.mutate}
+                            pending={createCourseMutation.isPending}
+                        />
                     }
-                    
-                    {activePanel==="reviews" && 
-                        <div className={styles.tableCard}>
-                            <p className={styles.state}>Review management will list student feedback here when the backend returns reviews.</p>
-                        </div>
-                    }
-                    
-                </section>
-                
-                {profileOpen && 
-                    <ProfileModal 
-                        form={profileForm}
-                        onClose={()=>setProfileOpen(false)}
-                        onSubmit={createProfileMutation.mutate}
-                        pending={createProfileMutation.isPending}
-                    />    
-                } 
-                
-                {courseOpen && 
-                    <CourseModal
-                        form={courseForm}
-                        onClose={()=>setCourseOpen(false)}
-                        onSubmit={createCourseMutation.mutate}
-                        pending={createCourseMutation.isPending}
-                    />
-                }
-            </main>
-        </MainLayout>;
+                </main>
+            </MainLayout>;
+        </ProtectedRoute>
 }
 
 function CredentialCard({title,items}:{title:string;items?:string[]}){
@@ -471,7 +503,13 @@ function ProfileModal(
                 </div>)
 }
 
-function CourseModal({form,onClose,onSubmit,pending}:{form:ReturnType<typeof useForm<CourseFormValues>>;onClose:()=>void;onSubmit:(data:CourseFormValues)=>void;pending:boolean}){
+function CourseModal(
+    {form,onClose,onSubmit,pending}:
+    {form:ReturnType<typeof useForm<CourseFormValues>>;
+    onClose:()=>void;
+    onSubmit:(data:CourseFormValues)=>void;
+    pending:boolean
+}){
     return(
         <div className={styles.modalOverlay}>
             <form className={styles.settingsModal} onSubmit={form.handleSubmit(onSubmit)}>
@@ -484,19 +522,66 @@ function CourseModal({form,onClose,onSubmit,pending}:{form:ReturnType<typeof use
                 <h2>Create course</h2>
                 
                 <div className={styles.formGrid}>
-                    {Object.keys(emptyCourse).map((name)=> name==="description" ? 
-                        <label className={styles.fullWidth} key={name}>
-                            Description
-                            <textarea {...form.register("description")}/>
-                        </label> 
-                        : 
-                        <label key={name}>
-                            {name.replaceAll("_"," ")}
-                            <input type={name.includes("date") ? "date" : name==="duration_minutes" ? "number" : "text"} 
-                            
-                            {...form.register(name as keyof CourseFormValues)}/>
-                        </label>
-                    )}
+                    <label>
+                        Course title
+                        <input {...form.register("course_title")}/>
+                    </label>
+
+                    <label>
+                        Duration minutes
+                        <input type="number" min={1} {...form.register("duration_minutes",{valueAsNumber:true})}/>
+                    </label>
+
+                    <label>
+                        Course type
+                        <select {...form.register("course_type")}>
+                            <option value="online">Online</option>
+                            <option value="offline">Offline</option>
+                        </select>
+                    </label>
+
+                    <label>
+                        Price per hour
+                        <input type="number" min={0} step="0.01" {...form.register("price_per_hour",{valueAsNumber:true})}/>
+                    </label>
+
+                    <label>
+                        Lesson package
+                        <input {...form.register("lesson_package")}/>
+                    </label>
+
+                    <label>
+                        Language
+                        <input {...form.register("language")}/>
+                    </label>
+
+                    <label className={styles.fullWidth}>
+                        Available days
+                        <select multiple className={styles.multiSelect} {...form.register("days_available")}>
+                            {weekDays.map((day)=><option key={day} value={day}>{day}</option>)}
+                        </select>
+                        <small>Hold Ctrl/Cmd to choose multiple days.</small>
+                    </label>
+
+                    <label>
+                        Start time
+                        <input type="time" {...form.register("time_slot_start")}/>
+                    </label>
+
+                    <label>
+                        End time
+                        <input type="time" {...form.register("time_slot_end")}/>
+                    </label>
+
+                    <label>
+                        Start date
+                        <input type="date" {...form.register("start_date")}/>
+                    </label>
+
+                    <label className={styles.fullWidth}>
+                        Description
+                        <textarea {...form.register("description")}/>
+                    </label>
                 </div>
                 
                 <button type="submit" disabled={pending}>

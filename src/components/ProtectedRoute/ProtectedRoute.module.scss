@@ -1,0 +1,17 @@
+.guardState{
+    min-height:60vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    color:#0f766e;
+    font-weight:900;
+}
+
+.spin{
+    animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+    to{transform:rotate(360deg)}
+}

@@ -377,6 +377,7 @@
         }
     
         input,
+        select,
         textarea{
             width:100%;
             padding:12px 14px;
@@ -392,6 +393,27 @@
     
         input[type="checkbox"]{
             margin-right:8px;
+        }
+
+        select{
+            background:#ffffff;
+            cursor:pointer;
+        }
+
+        .multiSelect{
+            min-height:132px;
+            padding:10px;
+
+            option{
+                padding:8px 10px;
+                border-radius:10px;
+            }
+        }
+
+        small{
+            color:#64748b;
+            font-size:12px;
+            font-weight:700;
         }
     
         button[type="submit"]{
