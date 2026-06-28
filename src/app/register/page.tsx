@@ -1,4 +1,5 @@
 "use client";
+
 import Link from "next/link";
 import { AxiosError } from "axios";
 import {useForm} from "react-hook-form";
@@ -7,6 +8,8 @@ import { appToast } from "@/lib/toast";
 import { authService } from "@/services/auth/auth.service";
 import { RegisterFormData,RegisterPayload,registerSchema } from "@/lib/validations/register.schema";
 import styles from "./Register.module.scss";
+
+import { useRouter } from "next/navigation";
 
 type ApiErrorData=Record<string,string | string[]> & {
     detail?:string;
@@ -31,6 +34,8 @@ const getRegisterErrorMessage=(error:unknown)=>{
 };
 
 export default function RegisterPage(){
+    const router=useRouter();
+
     const{
         register,
         handleSubmit,
@@ -49,7 +54,7 @@ export default function RegisterPage(){
         },
     });
 
-    const isTeacher=watch("is_teacher");
+    // const isTeacher=watch("is_teacher");
 
     const onSubmit=async(data:RegisterFormData)=>{
         const payload:RegisterPayload={
@@ -62,7 +67,12 @@ export default function RegisterPage(){
 
         try{
             await authService.register(payload);
-            appToast.success("Account created successfully! You can login now.");
+            appToast.success(
+                data.is_teacher
+                    ? "Tutor account created! Please wait for admin approval before using the dashboard."
+                    : "Student account created! You can login now"
+            );
+            router.push("/");
         }
         catch(error){
             appToast.error(getRegisterErrorMessage(error));

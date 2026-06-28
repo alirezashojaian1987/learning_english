@@ -24,16 +24,13 @@ export default function LoginModal({
         register,handleSubmit,formState:{errors,isSubmitting},
     }=useForm<LoginFormData>({resolver:zodResolver(loginSchema),});
 
-    const onSubmit=async(
-        data:LoginFormData
-    )=>{
+    const onSubmit=async(data:LoginFormData)=>{
         try{
             await authService.login(data);
             const user=await authService.me();
 
             dispatch(setUser(user));
             appToast.success("Login successful");
-            console.log(user);
             onClose();
         }
         catch(error){
