@@ -92,30 +92,16 @@ export interface TutorDashboard {
 // };
 
 export interface TutorProfilePayload{
-    first_name:string;
-    last_name:string;
     phone_number:string;
     country:string;
-
     subjects:string[];
-
-    languages_spoken:{
-        language:string;
-        level:string;
-    }[];
-
+    languages_spoken:TutorLanguage[];
     bio:string;
     teaching_style:string;
     expectation:string;
     description:string;
-
     intro_video_url?:string;
-
     certificates:TutorCertificate[];
-
     educations:TutorEducation[];
-
     experiences:TutorExperience[];
-
-    courses:TutorCourse[];
 }

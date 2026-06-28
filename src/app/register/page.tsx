@@ -10,8 +10,6 @@ import { RegisterFormData,RegisterPayload,registerSchema } from "@/lib/validatio
 import styles from "./Register.module.scss";
 
 import { useRouter } from "next/navigation";
-import { useAppDispatch } from "@/store/hooks";
-import { setUser } from "@/store/slices/authSlice";
 
 type ApiErrorData=Record<string,string | string[]> & {
     detail?:string;
@@ -37,7 +35,6 @@ const getRegisterErrorMessage=(error:unknown)=>{
 
 export default function RegisterPage(){
     const router=useRouter();
-    const dispatch=useAppDispatch();
 
     const{
         register,
@@ -57,7 +54,7 @@ export default function RegisterPage(){
         },
     });
 
-    const isTeacher=watch("is_teacher");
+    // const isTeacher=watch("is_teacher");
 
     const onSubmit=async(data:RegisterFormData)=>{
         const payload:RegisterPayload={
@@ -70,17 +67,12 @@ export default function RegisterPage(){
 
         try{
             await authService.register(payload);
-            appToast.success(data.is_teacher ? "Tutor account created! Complete your tutor profile." : "Student account created! Going to your dashboard.");
-
-            try{
-                const user=await authService.me();
-                dispatch(setUser(user));
-                router.push(user.is_teacher ? "/dashboard/tutor" : "/dashboard/student");
-            }
-
-            catch{
-                router.push("/");
-            }
+            appToast.success(
+                data.is_teacher
+                    ? "Tutor account created! Please wait for admin approval before using the dashboard."
+                    : "Student account created! You can login now"
+            );
+            router.push("/");
         }
         catch(error){
             appToast.error(getRegisterErrorMessage(error));

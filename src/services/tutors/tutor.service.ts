@@ -17,12 +17,17 @@ export const tutorService={
         return response.data;
     },
 
+    updateProfile:async(data:TutorProfilePayload):Promise<Tutor>=>{
+        const response=await api.patch("/create-tutor-profile/",data);
+        return response.data;
+    },
+
     getCourses:async():Promise<TutorCourse[]>=>{
         const response=await api.get("/tutor-courses/");
         return response.data;
     },
 
-    createCourse:async(data:Omit<TutorCourse,"id" | "tutor">):Promise<TutorCourse>=>{
+    createCourse:async(data:Omit<TutorCourse,"id">):Promise<TutorCourse>=>{
         const response=await api.post("/tutor-courses/",data);
         return response.data;
     },

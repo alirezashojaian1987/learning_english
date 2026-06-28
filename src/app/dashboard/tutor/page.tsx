@@ -106,8 +106,6 @@ export default function TutorDashboardPage(){
     const createProfileMutation=useMutation({
         mutationFn:(data:ProfileFormValues)=>{
             const payload:TutorProfilePayload={
-                first_name:user?.first_name ?? "",
-                last_name:user?.last_name ?? "",
                 phone_number:data.phone_number,
                 country:data.country,
                 subjects:splitList(data.subjects),
@@ -129,11 +127,10 @@ export default function TutorDashboardPage(){
                 description:data.description,
                 experiences:[],
                 intro_video_url:data.intro_video_url || undefined,
-                // intro_video_file:"",
-                courses:[]
             };
 
-            return tutorService.createProfile(payload);
+            // return tutorService.createProfile(payload);
+            return tutor ? tutorService.updateProfile(payload) : tutorService.createProfile(payload);
         },
 
         onSuccess:()=>{
@@ -155,6 +152,7 @@ export default function TutorDashboardPage(){
                 price_per_hour:formatDecimalString(course.price_per_hour),
                 days_available:course.days_available,
                 time_slots:[`${time_slot_start} - ${time_slot_end}`],
+                tutor:tutor?.id,
             });
         },
 
