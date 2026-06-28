@@ -5,6 +5,13 @@ export interface Course {
     description:string;
     detail:string;
 
+    requirements?:string;
+    materials?:string;
+    schedule_day?:string;
+    schedule_start?:string;
+    schedule_end?:string;
+    lessons?:unknown[];
+
     price_per_hour:string;
     price_per_dollar:string;
     price_per_toman:string;

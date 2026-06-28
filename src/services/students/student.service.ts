@@ -1,5 +1,5 @@
 import { api } from "../api/api";
-import type { Enrollment, Homework, StudentDashboard, StudentProfilePayload } from "@/types/student.types";
+import type { Enrollment, EnrollmentPayload, Homework, StudentDashboard, StudentProfilePayload } from "@/types/student.types";
 
 export const studentService={
     getDashboard:async():Promise<StudentDashboard>=>{
@@ -13,7 +13,12 @@ export const studentService={
     },
 
     getEnrollments:async():Promise<Enrollment[]>=>{
-        const response=await api.get("/enrollments");
+        const response=await api.get("/enrollments/");
+        return response.data;
+    },
+
+    createEnrollment:async(data:EnrollmentPayload):Promise<Enrollment>=>{
+        const response=await api.post("/enrollments/",data);
         return response.data;
     },
 

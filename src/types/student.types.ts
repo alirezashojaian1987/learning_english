@@ -17,6 +17,14 @@ export interface StudentProfilePayload{
     student_homework_completed?:boolean;
 }
 
+export interface EnrollmentPayload{
+    course:number;
+    payment_amount:string;
+    currency:string;
+    payment_note:string;
+    payment_proof?:string;
+}
+
 export interface Enrollment{
     id:number;
     course:Course;
