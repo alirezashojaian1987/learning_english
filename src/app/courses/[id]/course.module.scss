@@ -1,0 +1,195 @@
+@use "../../../styles/variables.scss" as *;
+
+.detailsPage {
+  padding: 34px 0 70px;
+  color: var(--text-primary, #172033);
+  
+  .backButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--card-bg, #fff);
+    color: var(--text-primary, #172033);
+    padding: 10px 14px;
+    font-weight: 800;
+    box-shadow: 0 12px 30px rgba(16, 24, 40, 0.08);
+    cursor: pointer;
+  }
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(280px, 0.9fr) 1.1fr;
+    gap: 30px;
+    align-items: stretch;
+    border: 1px solid var(--border-color, rgba(16, 24, 40, 0.08));
+    border-radius: 32px;
+    background: var(--card-bg, #fff);
+    box-shadow: 0 24px 70px rgba(16, 24, 40, 0.1);
+    overflow: hidden;
+  }
+  .imageWrap {
+    min-height: 390px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(
+      135deg,
+      rgba(33, 180, 135, 0.15),
+      rgba(46, 228, 173, 0.07)
+    );
+    font-size: 72px;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+  .heroContent {
+    padding: 34px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    h1 {
+      font-size: clamp(34px, 5vw, 58px);
+      line-height: 1.02;
+      font-weight: 900;
+      letter-spacing: -1.5px;
+    }
+    p {
+      color: var(--text-muted, #667085);
+      font-size: 17px;
+      line-height: 1.75;
+    }
+    .badge {
+      width: max-content;
+      border-radius: 999px;
+      background: rgba(33, 180, 135, 0.12);
+      color: $primary_color;
+      padding: 8px 13px;
+      font-weight: 900;
+    }
+    textarea {
+      min-height: 86px;
+      border: 1px solid var(--border-color, #d0d5dd);
+      border-radius: 16px;
+      background: var(--input-bg, #fff);
+      color: inherit;
+      padding: 13px;
+      resize: vertical;
+    }
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    button,
+    a {
+      border: 0;
+      border-radius: 16px;
+      padding: 13px 18px;
+      font-weight: 900;
+      text-decoration: none;
+    }
+    button {
+      background: $primary_color;
+      color: #fff;
+      cursor: pointer;
+      &:disabled {
+        cursor: not-allowed;
+        opacity: 0.65;
+      }
+    }
+    a {
+      background: rgba(33, 180, 135, 0.1);
+      color: $primary_color;
+    }
+  }
+  .status {
+    width: max-content;
+    border-radius: 999px;
+    background: #fef3c7;
+    color: #92400e;
+    padding: 7px 12px;
+    font-weight: 900;
+    text-transform: capitalize;
+  }
+  .success,
+  .approved {
+    background: #dcfce7;
+    color: #166534;
+  }
+  .rejected {
+    background: #fee2e2;
+    color: #991b1b;
+  }
+  .pending {
+    background: #fef3c7;
+    color: #92400e;
+  }
+  .infoGrid,
+  .detailGrid {
+    display: grid;
+    gap: 18px;
+    margin-top: 22px;
+  }
+  .infoGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .detailGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .infoGrid article,
+  .detailGrid article {
+    border: 1px solid var(--border-color, rgba(16, 24, 40, 0.08));
+    border-radius: 24px;
+    background: var(--card-bg, #fff);
+    padding: 22px;
+    box-shadow: 0 14px 40px rgba(16, 24, 40, 0.07);
+    svg {
+      color: $primary_color;
+    }
+    strong,
+    h2 {
+      display: block;
+      margin: 10px 0 4px;
+      color: var(--text-primary, #172033);
+    }
+    span,
+    p {
+      color: var(--text-muted, #667085);
+      line-height: 1.7;
+    }
+  }
+  .state,
+  .error {
+    margin: 28px 0;
+    padding: 18px;
+    border-radius: 18px;
+    background: var(--card-bg, #fff);
+    font-weight: 800;
+  }
+  .error {
+    color: #991b1b;
+    background: #fef2f2;
+  }
+  .spin {
+    animation: spin 1s linear infinite;
+  }
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (max-width: 900px) {
+  .hero,
+  .infoGrid,
+  .detailGrid {
+    grid-template-columns: 1fr;
+  }
+  .imageWrap {
+    min-height: 260px;
+  }
+}

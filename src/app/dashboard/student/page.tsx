@@ -28,10 +28,8 @@ type ProfileFormValues={
     favourite_tutors:string;
 };
 
-// const parseNumberList=(value:string)=>value
-//     .split(",")
-//     .map((item)=>Number(item.trim()))
-//     .filter((item)=>Number.isFinite(item));
+const normalizeStatus=(status:string)=>status.toLowerCase();
+const isApproved=(status:string)=>["success","approved"].includes(normalizeStatus(status));
 
 const formatDate=(value:string | null)=>{
     if(!value) return "Not reviewed yet";
@@ -154,8 +152,9 @@ export default function StudentDashboardPage(){
                                 {enrollmentsLoading && <p className={styles.state}>Loading enrolled courses...</p>}
                                 {enrollmentsError && <p className={styles.error}>Failed to load enrollments.</p>}
 
-                                {!enrollmentsLoading && enrollments?.length===0 && <p className={styles.state}>You do not have any course enrollments yet.</p>}
-                                {enrollments?.map((enrollment)=>(
+                                {!enrollmentsLoading && enrollments?.filter((enrollment)=>isApproved(enrollment.status)).length===0 && <p className={styles.state}>You do not have any approved courses yet. Pending enrollments will appear here after admin approval.</p>}
+
+                                {enrollments?.filter((enrollment)=>isApproved(enrollment.status)).map((enrollment)=>(
                                     <article className={styles.courseCard} key={enrollment.id}>
                                         <span 
                                             className={`${styles.status} ${enrollment.status==="Pending" ? styles.pending : enrollment.status==="Success" ? styles.success : styles.rejected}`}>
@@ -186,7 +185,16 @@ export default function StudentDashboardPage(){
 
                                         <div>{enrollment.payment_amount} {enrollment.currency}</div>
 
-                                        <span className={styles.status}>{enrollment.status}</span>
+                                        <span 
+                                            className={`
+                                            ${styles.status}
+                                            ${normalizeStatus(enrollment.status)==="pending" ?
+                                            styles.pending :
+                                            isApproved(enrollment.status) ?
+                                            styles.success : styles.rejected}`}
+                                        >
+                                            {isApproved(enrollment.status) ? "Success" : enrollment.status}
+                                        </span>
 
                                         <small>Submitted: {formatDate(enrollment.submitted_at)} · Reviewed: {formatDate(enrollment.reviewed_at)}</small>
                                     </div>
